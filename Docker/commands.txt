@@ -1,0 +1,5 @@
+cd. >Dockerfile
+
+docker build -t my-ubuntu
+
+docker run -it --name ubuntu my-ubuntu
