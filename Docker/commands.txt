@@ -5,3 +5,5 @@ docker build -t my-ubuntu .
 docker run -it --name ubuntu my-ubuntu
 
 docker run --name dockerdemo -d -p 8080:80 dockerdemo
+
+docker exec -it <container-name> /bin/sh
