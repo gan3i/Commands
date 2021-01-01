@@ -1,6 +1,6 @@
 cd. >Dockerfile
 
-docker build -t my-ubuntu .
+docker build --no-cache -t my-ubuntu .
 
 docker run -it --name ubuntu my-ubuntu
 
