@@ -1,0 +1,18 @@
+CHMOD 
+
+R|W|E - Read, Write, Execute
+0|0|0 - No Permission
+
+100 -> 4 -> read
+010 -> 2 -> write
+001 -> 1 -> execute
+110 -> 6 -> read, write
+101 -> 5 -> read, execute
+011 -> 3 -> write, execute
+111 -> 7 -> read, write, execute
+
+O|G|O = Owner, Group, Other
+000  -> No Permission
+444 -> read, read, read
+744 - All, read, read 
+
