@@ -7,3 +7,6 @@ docker run -it --name ubuntu my-ubuntu
 docker run --name dockerdemo -d -p 8080:80 dockerdemo
 
 docker exec -it <container-name> /bin/sh
+
+# keep it running
+CMD tail -f /dev/null  
