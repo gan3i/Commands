@@ -1,0 +1,20 @@
+
+# -----------Azure CLI ----------------#
+az login
+
+az storage account list
+
+
+
+#--------------Powershell -------------#
+Set-ExecutionPolicy RemoteSigned
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+Install-PackageProvider NuGet -Force
+
+Install-Module -Name Az -AllowClobber -Scope CurrentUser
+
+Import-Module AZ -Verbose
+
+
