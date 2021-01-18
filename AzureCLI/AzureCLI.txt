@@ -17,4 +17,7 @@ Install-Module -Name Az -AllowClobber -Scope CurrentUser
 
 Import-Module AZ -Verbose
 
+Connect-AzAccount
+
+Get-AzVm
 
