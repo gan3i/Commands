@@ -1,17 +1,39 @@
 # Importing Az Module
 
-  ## start with this
-      Install-PackageProvider NuGet -Force
-Set-ExecutionPolicy RemoteSigned
+## start with this
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    Install-PackageProvider NuGet -Force
 
-Install-PackageProvider NuGet -Force
+## If the above command ends up with an error run these commands
 
-Install-Module -Name Az -AllowClobber -Scope CurrentUser
+    Set-ExecutionPolicy RemoteSigned
 
-Import-Module AZ -Verbose
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-Connect-AzAccount
+    Install-PackageProvider NuGet -Force
 
-Get-AzVm
+    Install-Module -Name Az -AllowClobber -Scope CurrentUser
+
+## and at last import az modules
+    Import-Module AZ -Verbose
+
+## login to  azure portal
+    Connect-AzAccount
+
+## get all the VMs
+    Get-AzVm
+
+## wildcard search for commands
+    get-command *webapp  
+
+
+# Create a VM
+  ## Create a resource group if you don't have one already. [Reference](https://docs.microsoft.com/en-us/powershell/module/az.resources/new-azresourcegroup?view=azps-5.3.0)
+
+    new-AzResourceGroup -Name powershellgrp -Location EastUs
+  
+  ## create a VM. [Reference](https://docs.microsoft.com/en-us/powershell/module/az.compute/new-azvm?view=azps-5.3.0)
+    New-AzVm -ResourceGroupName powershellgrp -Name aznewvm -Location EastUs -VirtualNetworkName "MynewVnet" -SubnetName "default" -SecurityGroupName "MynewNSG" -PublicIpAddressName "mypublicip" -OpenPorts 80,3389
+
+  ## stop a vm
+    Stop-Azvm -Name aznewvm -ResourceGroupName powershellgrp
