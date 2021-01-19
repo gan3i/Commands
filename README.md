@@ -1,2 +1,2 @@
-# Docker-Practice
-To practice docker
+# Useful commnds 
+some useful commands for different command line tools
