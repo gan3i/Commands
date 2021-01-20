@@ -1,6 +1,8 @@
+# Commands are not case sensitive
+
 # Importing Az Module
 
-## start with this
+## Start with this
 
     Install-PackageProvider NuGet -Force
 
@@ -14,26 +16,34 @@
 
     Install-Module -Name Az -AllowClobber -Scope CurrentUser
 
-## and at last import az modules
+## And at last import az modules
     Import-Module AZ -Verbose
 
-## login to  azure portal
+# Login to  azure portal
     Connect-AzAccount
 
-## get all the VMs
+## Get all the VMs
     Get-AzVm
 
-## wildcard search for commands
+## Wildcard search for commands
     get-command *webapp  
+    get-command *Resource
+    get-command *Vm
 
+<details>
+<summary>
+Create a VM
+</summary>
 
-# Create a VM
-  ## Create a resource group if you don't have one already. [Reference](https://docs.microsoft.com/en-us/powershell/module/az.resources/new-azresourcegroup?view=azps-5.3.0)
+  ### Create a resource group if you don't have one already. [Reference](https://docs.microsoft.com/en-us/powershell/module/az.resources/new-azresourcegroup?view=azps-5.3.0)
 
     new-AzResourceGroup -Name powershellgrp -Location EastUs
   
-  ## create a VM. [Reference](https://docs.microsoft.com/en-us/powershell/module/az.compute/new-azvm?view=azps-5.3.0)
+  ### Create a VM. [Reference](https://docs.microsoft.com/en-us/powershell/module/az.compute/new-azvm?view=azps-5.3.0)
     New-AzVm -ResourceGroupName powershellgrp -Name aznewvm -Location EastUs -VirtualNetworkName "MynewVnet" -SubnetName "default" -SecurityGroupName "MynewNSG" -PublicIpAddressName "mypublicip" -OpenPorts 80,3389
 
-  ## stop a vm
+  ### Stop a vm
     Stop-Azvm -Name aznewvm -ResourceGroupName powershellgrp
+</details>
+
+
