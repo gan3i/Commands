@@ -1,0 +1,101 @@
+# ======= Phase 1 - Final Image Init ===========
+# Setting up all the requirements for the final image
+# that won't change often.
+FROM nginx:1.18.0-alpine As base
+
+# Because the application is not running as Root, we can't have the
+# program run on a port number < 1000. "8081" is the next most common
+# non-root required web hosting port. "eight-zero-eight-zero" is not
+# chosen because it conflitcs with the template renaming system.
+EXPOSE 8081
+
+# Adding the bash
+RUN apk add --no-cache bash
+
+# Create a linux user with a known UserId and GroupId. Remember these
+# are Alpine commands, so the add* syntax is different from other
+# Linux distributions.
+RUN \
+    addgroup -g 2000 appuser && \
+    adduser -h /home/appuser -G appuser -D -u 2000 appuser
+
+# provide required access to appuser.
+RUN chown -R appuser:appuser /var/cache/nginx && \
+        chown -R appuser:appuser /var/log/nginx && \
+          chown -R appuser:appuser /etc/nginx/conf.d
+
+# Create nginx.pid file and provide access to user nginx.
+# this is required because when nginx runs it needs access to
+# master process id and master prcess id is written to nginx.pid file.
+RUN touch /var/run/nginx.pid && \
+        chown -R appuser:appuser /var/run/nginx.pid
+
+
+# Make a directory for copying published files from build step
+# and provide required permission to user nginx,
+# read, write and execute permission to user and
+# no permission to group and others
+RUN \
+    mkdir -p /app/helloworld && \
+    chown appuser:appuser /app/helloworld && \
+    chmod u=rwx,g=,o= /app/helloworld
+
+#Remove all the default nginx pages
+RUN rm -rf /usr/share/nginx/html/*
+
+
+# ======= Phase 2 - Building the software ===========
+# Do whatever is needed to make the published binary files
+
+# Using Alpine version and running the build under root user
+# since this image will be discarded after the build
+FROM node:14.15.1-alpine AS build
+
+# Make a new directory
+RUN \
+    mkdir -p /home/app
+
+# Change work directory to new directory
+WORKDIR /home/app
+
+# Copy all the files from current directory on host to
+# work directory on image,
+COPY . .
+
+# Install all dependencies
+RUN npm install
+
+# Build the source code for production.
+RUN npm run build -- --prod
+
+## ======= Phase 3 - Package the final image ===========
+# Shove the files made in the last phase into the output image.
+
+# Use Phase 1 as the starting point.
+FROM base As final
+
+# Copy nginx.conf and default.conf from host's current directory
+# to image's default directory
+COPY nginx.conf etc/nginx/nginx.conf
+COPY default.conf etc/nginx/conf.d/default.conf
+
+# Change the work directory to new directory created in phase 1
+WORKDIR /app/helloworld
+
+# Copy the compiled files from build step to the current directory
+# on the the image, this folder will be used by nginx as root folder
+COPY --from=build /home/app/dist/helloworld \
+                  /app/helloworld
+
+# Change to non-root user, any command from now onwards will be run
+# as user instead of non root user.
+USER appuser
+
+# Tag this image with data about the build.
+ARG BuildNumber
+ENV Meta__Version ${BuildNumber:-unknown}
+
+# Command to be executed when the container starts
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+#to keep the container running
+# CMD tail -f /dev/null
