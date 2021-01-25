@@ -29,6 +29,9 @@
 # creating service principle
     az ad sp create-for-rbac -n secretapp --skip-assignment
     
+# assigning service principles to keyvault
+    az keyvault set-policy --name <keyvault instance name> --spn "appid from the previuos step --secret-permissions backup delete get list set
+    
 
 
 
