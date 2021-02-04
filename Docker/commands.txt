@@ -14,6 +14,8 @@ CMD tail -f /dev/null
 
 https://medium.com/faun/angular-on-docker-environment-specific-settings-1e92c3ad01e6
 
+https://hackernoon.com/applying-angular-runtime-configurations-in-dockerized-environments-kr3a33pr
+
 to install bashin alphine
 
 RUN apk add --no-cache bash
