@@ -1,0 +1,8 @@
+# to create migrations 
+
+dotnet ef migrations add InitialCreate -o Data/Migrations
+
+you should have dotnet-ef installed to run above command
+
+## to add dev certificate to trusted certificate list
+dotnet dev-certs https --trust
